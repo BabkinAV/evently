@@ -11,6 +11,7 @@ export default {
     extend: {
       fontFamily: {
         sans: ['Inter var', ...defaultTheme.fontFamily.sans],
+				logo: ['Courgette']
       },
     },
   },
