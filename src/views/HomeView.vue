@@ -1,15 +1,10 @@
 <template>
-  <div class="flex">
-    <CardItem
-      v-for="eventData in data"
-      :key="eventData.id"
-      :eventData="eventData"
-    />
-  </div>
+	<CardGallery :event-arr="data"/>
 </template>
 
 <script setup lang="ts">
-import CardItem from '../components/CardItem.vue'
 
+import CardGallery from '@/components/CardGallery.vue';
 import data from '../data/data'
+
 </script>
