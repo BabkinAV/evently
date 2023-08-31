@@ -1,4 +1,6 @@
-const data = [
+import type { Event } from "@/types"
+
+const data: Event[] = [
   {
     id: '01',
     img: 'img/image-01.jpg',
@@ -32,6 +34,6 @@ const data = [
       'Fourth item description orem ipsum dolor sit amet, consectetur adipiscing elit. Aenean a varius metus. .',
     plannedDate: 1700642826
   }
-]
+] 
 
 export default data

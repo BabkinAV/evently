@@ -1,8 +1,8 @@
 interface Event {
-  title: string
-  description: string
   id: string
   img: string
+  title: string
+  description: string
   plannedDate: number
 }
 

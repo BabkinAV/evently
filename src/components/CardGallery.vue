@@ -2,8 +2,8 @@
   <div class="pl-[80px] flex justify-between items-center">
     <SelectInputSort v-model="sortParameter" />
     <RouterLink to="selected">
-      <p class="underline inline">Selected events:</p>
-      <span>(2)</span>
+      <p class="underline inline">Selected events: </p>
+      <span>({{ selectedEvents.length }})</span>
     </RouterLink>
   </div>
   <div
@@ -18,6 +18,8 @@ import SelectInputSort from '@/components/SelectInputSort.vue';
 import type { Event } from '@/types';
 import { computed, ref } from 'vue';
 import CardItem from '../components/CardItem.vue';
+import { storeToRefs } from 'pinia';
+import { useSelectedStore } from '@/stores/counter';
 const sortParameter = ref<'title' | 'date'>('title')
 
 const { eventArr } = defineProps<{ eventArr: Event[] }>()
@@ -32,4 +34,12 @@ const sortedEvents = computed(() => {
     return eventArr
   }
 })
+
+const store = useSelectedStore();
+
+const {selectedEvents} = storeToRefs(store)
+
+
+
+
 </script>

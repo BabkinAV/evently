@@ -1,6 +1,6 @@
 <template>
   <div>
-		<!-- TODO: Add location name from https://www.geoapify.com/ -->
+    <!-- TODO: Add location name from https://www.geoapify.com/ -->
     <div v-if="event" class="max-w-7xl mx-auto flex justify-center">
       <div class="max-w-xl">
         <img :src="'/' + event.img" :alt="event.title + ' image'" class="mx-auto" />
@@ -25,15 +25,20 @@
 <script setup lang="ts">
 import { useRoute } from 'vue-router'
 import data from '../data/data'
-import router from '@/router';
+import router from '@/router'
+import { useSelectedStore } from '@/stores/counter'
 
 const route = useRoute()
+const store = useSelectedStore()
+
+const { addToSelectedEvents } = store
 
 const event = data.find((el) => el.id === route.params.eventId)
 
 const handleAddToSelected = () => {
-	console.log('clicked!')
-	router.push('/')
+  if (event) {
+    addToSelectedEvents(event)
+  }
+  router.push('/')
 }
-
 </script>
