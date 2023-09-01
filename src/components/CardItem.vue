@@ -2,7 +2,7 @@
   <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
     <div class="max-h-[250px] overflow-clip">
       <RouterLink :to="'event/' + eventData.id">
-        <img class="rounded-t-lg" :src="eventData.img" alt="office space" />
+        <img class="rounded-t-lg" :src="'http://localhost:1337' + eventData.img" alt="office space" />
       </RouterLink>
     </div>
     <div class="p-5">
@@ -37,7 +37,7 @@ import { type Event } from '@/types';
 const {eventData} = defineProps<{ eventData: Event }>()
 
 const formattedDate = computed(() => {
-	const newDate = dayjs.unix(eventData.plannedDate).format('DD.MM.YYYY')
+	const newDate = dayjs(eventData.plannedDate).format('DD.MM.YYYY')
 	return newDate
 })
 

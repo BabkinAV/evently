@@ -2,7 +2,7 @@
   <div class="pl-[80px] flex justify-between items-center">
     <SelectInputSort v-model="sortParameter" />
     <RouterLink to="selected">
-      <p class="underline inline">Selected events: </p>
+      <p class="underline inline">Selected events:</p>
       <span>({{ selectedEvents.length }})</span>
     </RouterLink>
   </div>
@@ -14,32 +14,29 @@
 </template>
 
 <script setup lang="ts">
-import SelectInputSort from '@/components/SelectInputSort.vue';
-import type { Event } from '@/types';
-import { computed, ref } from 'vue';
-import CardItem from '../components/CardItem.vue';
-import { storeToRefs } from 'pinia';
-import { useSelectedStore } from '@/stores/counter';
+import SelectInputSort from '@/components/SelectInputSort.vue'
+import type { Event } from '@/types'
+import { computed, ref } from 'vue'
+import CardItem from '../components/CardItem.vue'
+import { storeToRefs } from 'pinia'
+import { useSelectedStore } from '@/stores/counter'
 const sortParameter = ref<'title' | 'date'>('title')
 
 const { eventArr } = defineProps<{ eventArr: Event[] }>()
-
 
 const sortedEvents = computed(() => {
   if (sortParameter.value === 'title') {
     return [...eventArr].sort((a, b) => a.title.localeCompare(b.title))
   } else if (sortParameter.value === 'date') {
-    return [...eventArr].sort((a, b) => a.plannedDate - b.plannedDate)
+    return [...eventArr].sort((a, b) => {
+      return a.plannedDate < b.plannedDate ? -1 : a.plannedDate > b.plannedDate ? 1 : 0
+    })
   } else {
     return eventArr
   }
 })
 
-const store = useSelectedStore();
+const store = useSelectedStore()
 
-const {selectedEvents} = storeToRefs(store)
-
-
-
-
+const { selectedEvents } = storeToRefs(store)
 </script>

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="text-center font-bold">This is a view for selected events</h1>
+    <h1 class="text-center font-bold text-2xl">Your selected events:</h1>
     <CardGallery :eventArr="selectedEvents" />
   </div>
 </template>

@@ -3,7 +3,24 @@ interface Event {
   img: string
   title: string
   description: string
-  plannedDate: number
+  plannedDate: string
 }
 
-export type { Event }
+interface EventResponse {
+  id: string
+  attributes: {
+    title: string
+    description: string
+    plannedDate: string
+    image: {
+      data: {
+        attributes: {
+          url: string
+        }
+      }
+    }
+  }
+}
+
+
+export type { Event, EventResponse }
