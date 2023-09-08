@@ -7,12 +7,14 @@
         <h1 class="text-center text-4xl font-extrabold my-5">{{ event.title }}</h1>
         <p>{{ event.description }}</p>
         <div class="flex justify-center pt-3">
-          <button
-            class="inline-flex items-center px-3 py-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:outline-none"
+          <ButtonCustom
             @click="handleAddToSelected"
           >
             Add to selected
-          </button>
+          </ButtonCustom>
+					<ButtonCustom class="ml-5" @click="handleReturnClick" variant="outlined">
+						Return to main
+					</ButtonCustom>
         </div>
       </div>
     </div>
@@ -27,6 +29,7 @@ import router from '@/router'
 import { useEventsStore } from '@/stores/events'
 import axios from 'axios'
 import { useRoute } from 'vue-router'
+import ButtonCustom from '@/components/ui/ButtonCustom.vue'
 
 import type { Event, EventResponse } from '@/types'
 import { ref } from 'vue'
@@ -47,12 +50,15 @@ const handleAddToSelected = () => {
   router.push('/')
 }
 
+const handleReturnClick = () => {
+	router.push('/')
+}
+
 
 const fetchEvent = () => {
   axios
     .get<{ data: EventResponse }>(`http://localhost:1337/api/events/${route.params.eventId}?populate=image`)
     .then((resp) => {
-      console.log(resp.data.data)
 			const respObj = resp.data.data;
       const foundEvent = {
 				id: respObj.id,
@@ -63,7 +69,6 @@ const fetchEvent = () => {
 			}
 			event.value = foundEvent;
 			
-      console.log(event.value)
     })
     .catch((err) => {
       console.log(err)
