@@ -9,7 +9,7 @@
         <div class="flex justify-center pt-3">
           <button
             class="inline-flex items-center px-3 py-3 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:outline-none"
-            
+            @click="handleAddToSelected"
           >
             Add to selected
           </button>
@@ -24,46 +24,31 @@
 
 <script setup lang="ts">
 import router from '@/router'
-import { useSelectedStore } from '@/stores/counter'
+import { useEventsStore } from '@/stores/events'
 import axios from 'axios'
 import { useRoute } from 'vue-router'
-import data from '../data/data'
 
 import type { Event, EventResponse } from '@/types'
 import { ref } from 'vue'
 
 const route = useRoute()
-const store = useSelectedStore()
+const eventsStore = useEventsStore()
 
-const { addToSelectedEvents } = store
+const { addToSelectedEvents } = eventsStore;
 
-const eventFromData = data.find((el) => el.id === route.params.eventId)
 
 const event = ref<Event>()
 
-// @click="handleAddToSelected"
 
-// const handleAddToSelected = () => {
-//   if (event.value) {
-//     addToSelectedEvents(event.value)
-//   }
-//   router.push('/')
-// }
-
-// const myObj = {
-// 	id: '',
-// 	img: 'fsfsf',
-// 	title: 'fsf',
-// 	description: 'sfs',
-// 	plannedDate: 'fsfs'
-// } as Event;
-
-// event.value = myObj
+const handleAddToSelected = () => {
+  if (event.value) {
+    addToSelectedEvents(event.value)
+  }
+  router.push('/')
+}
 
 
-
-const fetchEvents = () => {
-  // }
+const fetchEvent = () => {
   axios
     .get<{ data: EventResponse }>(`http://localhost:1337/api/events/${route.params.eventId}?populate=image`)
     .then((resp) => {
@@ -85,5 +70,5 @@ const fetchEvents = () => {
     })
 }
 
-fetchEvents()
+fetchEvent()
 </script>

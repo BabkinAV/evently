@@ -19,7 +19,7 @@ import type { Event } from '@/types'
 import { computed, ref } from 'vue'
 import CardItem from '../components/CardItem.vue'
 import { storeToRefs } from 'pinia'
-import { useSelectedStore } from '@/stores/counter'
+import { useEventsStore } from '@/stores/events'
 const sortParameter = ref<'title' | 'date'>('title')
 
 const { eventArr } = defineProps<{ eventArr: Event[] }>()
@@ -36,7 +36,7 @@ const sortedEvents = computed(() => {
   }
 })
 
-const store = useSelectedStore()
+const store = useEventsStore()
 
 const { selectedEvents } = storeToRefs(store)
 </script>

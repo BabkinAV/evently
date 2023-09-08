@@ -7,11 +7,11 @@
 
 <script setup lang="ts">
 import CardGallery from '@/components/CardGallery.vue'
-import { useSelectedStore } from '@/stores/counter';
+import { useEventsStore } from '@/stores/events';
 import { storeToRefs } from 'pinia';
 
 
-const store = useSelectedStore()
+const store = useEventsStore()
 
 const {selectedEvents} = storeToRefs(store)
 

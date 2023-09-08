@@ -2,7 +2,11 @@
   <div class="max-w-sm bg-white border border-gray-200 rounded-lg shadow">
     <div class="max-h-[250px] overflow-clip">
       <RouterLink :to="'event/' + eventData.id">
-        <img class="rounded-t-lg" :src="'http://localhost:1337' + eventData.img" alt="office space" />
+        <img
+          class="rounded-t-lg"
+          :src="'http://localhost:1337' + eventData.img"
+          alt="office space"
+        />
       </RouterLink>
     </div>
     <div class="p-5">
@@ -19,8 +23,8 @@
           <ArrowRight class="w-3.5 h-3.5 ml-2" />
         </RouterLink>
         <div class="flex items-center gap-1">
-					<CalendarDaysIcon class="h-8 w-8 text-blue-500"/>
-         <span class="font-bold text-sm mt-1">{{ formattedDate }}</span>
+          <CalendarDaysIcon class="h-8 w-8 text-blue-500" />
+          <span class="font-bold text-sm mt-1">{{ formattedDate }}</span>
         </div>
       </div>
     </div>
@@ -30,16 +34,14 @@
 <script lang="ts" setup>
 import ArrowRight from './icons/ArrowRight.vue'
 import { CalendarDaysIcon } from '@heroicons/vue/20/solid'
-import dayjs from 'dayjs';
-import { computed } from 'vue';
-import { type Event } from '@/types';
+import dayjs from 'dayjs'
+import { computed } from 'vue'
+import { type Event } from '@/types'
 
-const {eventData} = defineProps<{ eventData: Event }>()
+const { eventData } = defineProps<{ eventData: Event }>()
 
 const formattedDate = computed(() => {
-	const newDate = dayjs(eventData.plannedDate).format('DD.MM.YYYY')
-	return newDate
+  const newDate = dayjs(eventData.plannedDate).format('DD.MM.YYYY')
+  return newDate
 })
-
-
 </script>
