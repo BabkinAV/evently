@@ -7,7 +7,7 @@
     </div>
 
     <div class="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-      <form class="space-y-6" action="#" method="POST">
+      <form class="space-y-6" @submit="handleLoginFormSubmit" method="POST">
         <div>
           <label for="email" class="block text-sm font-medium leading-6 text-gray-900"
             >Email address</label
@@ -54,7 +54,7 @@
 
       <p class="mt-10 text-center text-sm text-gray-500">
         Do not have an account?
-        <a href="#" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
+        <a href="/register" class="font-semibold leading-6 text-indigo-600 hover:text-indigo-500"
           >Register here</a
         >
       </p>
@@ -62,4 +62,17 @@
   </div>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import { useAuthStore } from '@/stores/auth'
+const authStore = useAuthStore()
+
+
+const handleLoginFormSubmit = (event: Event) => {
+  event.preventDefault()
+  const target = event.target as typeof event.target & {
+    email: { value: string }
+    password: { value: string }
+  }
+	authStore.authenticateUser(target.email.value, target.password.value);
+}
+</script>

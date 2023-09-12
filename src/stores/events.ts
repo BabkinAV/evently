@@ -15,7 +15,6 @@ export const useEventsStore = defineStore('selected', () => {
 		axios
     .get<{data: EventResponse[]}>('http://localhost:1337/api/events?populate=image')
     .then((resp) => {
-  		console.log(resp.data.data);
       eventArr.value = resp.data.data.map((el) => {
         return {
           id: el.id,
@@ -25,7 +24,6 @@ export const useEventsStore = defineStore('selected', () => {
           plannedDate: el.attributes.plannedDate
         }
       })
-  		console.log(eventArr.value);
     })
     .catch((err) => {
       console.log(err)
