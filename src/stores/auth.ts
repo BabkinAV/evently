@@ -7,8 +7,10 @@ import router from '@/router'
 
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null)
+  const isAuthenticating = ref<Boolean>(false)
 
   const authenticateUser = (identifier: string, password: string) => {
+    isAuthenticating.value = true
     axios
       .post<LoginResponse>('http://localhost:1337/api/auth/local', { identifier, password })
       .then((resp) => {
@@ -25,6 +27,9 @@ export const useAuthStore = defineStore('auth', () => {
       .catch((errResp: ErrorResponse) => {
         console.log(errResp.error.message)
       })
+      .finally(() => {
+        isAuthenticating.value = false
+      })
   }
 
   const logoutUser = () => {
@@ -32,5 +37,5 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = null
   }
 
-  return { authenticateUser, user, logoutUser }
+  return { authenticateUser, user, logoutUser, isAuthenticating }
 })

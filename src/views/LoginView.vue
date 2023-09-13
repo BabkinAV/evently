@@ -45,9 +45,10 @@
         <div>
           <button
             type="submit"
-            class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 min-h-[36px] items-center"
           >
-            Sign in
+            <span v-if="!authStore.isAuthenticating">Sign in</span>
+            <SpinnerIcon v-else />
           </button>
         </div>
       </form>
@@ -64,8 +65,8 @@
 
 <script setup lang="ts">
 import { useAuthStore } from '@/stores/auth'
+import SpinnerIcon from '@/components/ui/SpinnerIcon.vue'
 const authStore = useAuthStore()
-
 
 const handleLoginFormSubmit = (event: Event) => {
   event.preventDefault()
@@ -73,6 +74,6 @@ const handleLoginFormSubmit = (event: Event) => {
     email: { value: string }
     password: { value: string }
   }
-	authStore.authenticateUser(target.email.value, target.password.value);
+  authStore.authenticateUser(target.email.value, target.password.value)
 }
 </script>
