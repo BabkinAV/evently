@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import EventView from '../views/EventView.vue'
 import SelectedView from '@/views/SelectedView.vue'
 import LoginView from '@/views/LoginView.vue'
+import AddEventView from '@/views/AddEventView.vue'
 
 
 const router = createRouter({
@@ -27,6 +28,11 @@ const router = createRouter({
       path: '/login',
       name: 'login',
 			component: LoginView
+    },
+		{
+      path: '/add',
+      name: 'add',
+			component: AddEventView
     },
   ]
 })

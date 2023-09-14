@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- TODO: Add location name from https://www.geoapify.com/ -->
     <div v-if="event !== undefined" class="max-w-7xl mx-auto flex justify-center">
       <div class="max-w-xl">
         <img
