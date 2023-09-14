@@ -1,4 +1,4 @@
-import axios from 'axios'
+import axios, { AxiosError } from 'axios'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
@@ -8,9 +8,11 @@ import router from '@/router'
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null)
   const isAuthenticating = ref<Boolean>(false)
+	const authenticationError = ref<string>('');
 
   const authenticateUser = (identifier: string, password: string) => {
-    isAuthenticating.value = true
+    isAuthenticating.value = true;
+		authenticationError.value = '';
     axios
       .post<LoginResponse>('http://localhost:1337/api/auth/local', { identifier, password })
       .then((resp) => {
@@ -24,8 +26,9 @@ export const useAuthStore = defineStore('auth', () => {
         router.push('/')
         console.log(resp.data)
       })
-      .catch((errResp: ErrorResponse) => {
-        console.log(errResp.error.message)
+      .catch((errResp: AxiosError<ErrorResponse>) => {
+				authenticationError.value = errResp.response?.data.error.message ?? errResp.message;
+				console.log(errResp);
       })
       .finally(() => {
         isAuthenticating.value = false
@@ -37,5 +40,10 @@ export const useAuthStore = defineStore('auth', () => {
     user.value = null
   }
 
-  return { authenticateUser, user, logoutUser, isAuthenticating }
+	const clearAuthenticationError = () => {
+		console.log('fired handler')
+		authenticationError.value = '';
+	}
+
+  return { authenticateUser, user, logoutUser, isAuthenticating, authenticationError,  clearAuthenticationError}
 })

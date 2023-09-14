@@ -24,7 +24,7 @@
         </RouterLink>
         <div class="flex items-center gap-1">
           <CalendarDaysIcon class="h-8 w-8 text-blue-500" />
-          <span class="font-bold text-sm mt-1">{{ formattedDate }}</span>
+          <span class="font-bold text-sm mt-1">{{ formattedDate(eventData.plannedDate) }}</span>
         </div>
       </div>
     </div>
@@ -34,14 +34,9 @@
 <script lang="ts" setup>
 import ArrowRight from './icons/ArrowRight.vue'
 import { CalendarDaysIcon } from '@heroicons/vue/20/solid'
-import dayjs from 'dayjs'
-import { computed } from 'vue'
 import { type Event } from '@/types'
+import {formattedDate} from '@/helpers/formattedDate'
 
 const { eventData } = defineProps<{ eventData: Event }>()
 
-const formattedDate = computed(() => {
-  const newDate = dayjs(eventData.plannedDate).format('DD.MM.YYYY')
-  return newDate
-})
 </script>

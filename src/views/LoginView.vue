@@ -20,6 +20,7 @@
               autocomplete="email"
               required
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
+							@change="authStore.clearAuthenticationError"
             />
           </div>
         </div>
@@ -38,6 +39,7 @@
               autocomplete="current-password"
               required
               class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 px-2"
+							@change="authStore.clearAuthenticationError"
             />
           </div>
         </div>
@@ -48,8 +50,9 @@
             class="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 min-h-[36px] items-center"
           >
             <span v-if="!authStore.isAuthenticating">Sign in</span>
-            <SpinnerIcon v-else />
+            <SpinnerIcon v-else color="white"/>
           </button>
+					<p v-if="authStore.authenticationError !== ''" class="text-red-500 pt-4 text-center">{{ authStore.authenticationError }}</p>
         </div>
       </form>
 
@@ -69,7 +72,7 @@ import SpinnerIcon from '@/components/ui/SpinnerIcon.vue'
 const authStore = useAuthStore()
 
 const handleLoginFormSubmit = (event: Event) => {
-  event.preventDefault()
+  event.preventDefault();
   const target = event.target as typeof event.target & {
     email: { value: string }
     password: { value: string }
