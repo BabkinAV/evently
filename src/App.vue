@@ -1,11 +1,13 @@
 <template>
-  <div class="min-h-screen bg-slate-50 w-screen">
-    <TheHeader />
-    <main>
-      <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-">
-        <RouterView />
-      </div>
-    </main>
+  <div>
+    <div class="min-h-screen bg-slate-50">
+      <TheHeader />
+      <main>
+        <div class="mx-auto max-w-7xl py-6 sm:px-6 lg:px-">
+          <RouterView />
+        </div>
+      </main>
+    </div>
   </div>
 </template>
 
@@ -23,14 +25,12 @@ if (user) {
   const parsedUser = JSON.parse(user) as User
 
   const decodedToken = jwt_decode<tokenPayload>(parsedUser.jwt)
-	const timestamp =  Date.now();
+  const timestamp = Date.now()
 
-
-  if (decodedToken.exp *1000 > timestamp) {
+  if (decodedToken.exp * 1000 > timestamp) {
     authStore.user = parsedUser
   } else {
-		authStore.logoutUser();
-	}
+    authStore.logoutUser()
+  }
 }
-
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <header class="bg-blue-500 shadow">
+  <header class="bg-blue-500 shadow pl-[calc(100vw-100%)]">
     <div class="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex justify-between items-center">
       <RouterLink to="/">
         <h1 class="text-5xl font-bold tracking-tight text-white text-center font-logo inline-block">
@@ -23,7 +23,7 @@
       <RouterLink to="/login" v-else>
         <span class="flex items-center gap-1 text-white text-md">
           <UserIcon class="w-7 h-7" />
-          <span class="pr-5"> Login </span>
+          <span class="pr-5">Login</span>
         </span>
       </RouterLink>
     </div>

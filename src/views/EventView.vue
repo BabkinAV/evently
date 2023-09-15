@@ -42,7 +42,7 @@
 
 <script setup lang="ts">
 import ButtonCustom from '@/components/ui/ButtonCustom.vue'
-import MapItem from '@/components/Maps/MapItem.vue'
+import MapItem from '@/components/maps/MapItem.vue'
 import SpinnerIcon from '@/components/ui/SpinnerIcon.vue'
 import { formattedDate } from '@/helpers/formattedDate'
 import router from '@/router'
