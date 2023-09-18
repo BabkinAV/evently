@@ -41,7 +41,6 @@ export const useAuthStore = defineStore('auth', () => {
   }
 
 	const clearAuthenticationError = () => {
-		console.log('fired handler')
 		authenticationError.value = '';
 	}
 

@@ -24,15 +24,14 @@ interface EventResponse {
         }
       }
     }
-		location: {
-			id: number
-			lon: number
-			lat: number
-			title: string
-		}
+    location: {
+      id: number
+      lon: number
+      lat: number
+      title: string
+    }
   }
 }
-
 
 interface LoginResponse {
   jwt: string
@@ -56,6 +55,21 @@ interface ErrorResponse {
     message: string // A human readable error message
     details: {}
   }
+}
+
+interface EventCreateResponse {
+  data: {
+    id: number
+    attributes: {
+      title: string
+      description: string
+      createdAt: string
+      updatedAt: string
+      publishedAt: string
+      plannedDate: string
+    }
+  }
+  meta: {}
 }
 
 interface tokenPayload {
@@ -131,5 +145,7 @@ export type {
   ErrorResponse,
   User,
   tokenPayload,
-  reverseGeocodingResponse
+  reverseGeocodingResponse,
+	EventCreateResponse
+
 }

@@ -1,5 +1,5 @@
 <template>
-  <CardGallery :eventArr="eventArr" v-if="eventArr.length > 0"/>
+  <CardGallery :eventArr="eventArr" v-if="eventArr.length > 0" :key="eventArr.length"/>
 	<p v-else>Loading...</p>
 	<div v-for="event in eventArr" :key="event.id">
 	</div>
@@ -15,6 +15,5 @@ const eventStore = useEventsStore()
 
 const {eventArr} = storeToRefs(eventStore);
 
-eventStore.fetchEvents();
 
 </script>

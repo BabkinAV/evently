@@ -3,7 +3,7 @@ import axios from 'axios'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-export const useEventsStore = defineStore('selected', () => {
+export const useEventsStore = defineStore('events', () => {
   const selectedEvents = ref<Event[]>([])
 	const eventArr =  ref<Event[]>([]);
   // const doubleCount = computed(() => count.value * 2)
@@ -15,7 +15,7 @@ export const useEventsStore = defineStore('selected', () => {
 		axios
     .get<{data: EventResponse[]}>('http://localhost:1337/api/events?populate=image')
     .then((resp) => {
-      eventArr.value = resp.data.data.map((el) => {
+			eventArr.value = resp.data.data.map((el) => {
         return {
           id: el.id,
           img: el.attributes.image.data.attributes.url,
@@ -29,6 +29,10 @@ export const useEventsStore = defineStore('selected', () => {
       console.log(err)
     })
 	}
+
+
+
+	fetchEvents();
 
   return { eventArr, fetchEvents,  selectedEvents, addToSelectedEvents }
 })

@@ -22,7 +22,7 @@
               type="file"
               name="file"
               id="fileInput"
-							class="opacity-0 overflow-hidden absolute w-[1px] h-[1px] top-0 left-0"
+              class="opacity-0 overflow-hidden absolute w-[1px] h-[1px] top-0 left-0"
               @change="onFileInputChange"
               ref="fileInput"
               accept=".jpg,.jpeg,.png"
@@ -107,12 +107,18 @@
         </div>
 
         <div class="flex justify-center">
-          <ButtonCustom type="submit"> Add event </ButtonCustom>
+          <ButtonCustom type="submit" class="min-w-[100px] flex justify-center">
+            <span v-if="!isFormSubmitting">Add event</span>
+            <SpinnerIconVue v-else color="white" />
+          </ButtonCustom>
           <ButtonCustom class="ml-5 px-5" @click="handleClearForm" variant="outlined" type="button">
             Clear
           </ButtonCustom>
         </div>
       </form>
+      <p v-if="errorSubmitting !== ''" class="text-red-500 pt-4 text-center">
+        {{ errorSubmitting }}
+      </p>
     </div>
   </div>
 </template>
@@ -120,9 +126,14 @@
 <script setup lang="ts">
 import MapItemDraggable from '@/components/maps/MapItemDraggable.vue'
 import ButtonCustom from '@/components/ui/ButtonCustom.vue'
+import SpinnerIconVue from '@/components/ui/SpinnerIcon.vue'
+import { DEFAULT_COORDINATES, DEFAULT_IMAGE } from '@/defaultValues'
+import router from '@/router'
+import { useEventsStore } from '@/stores/events'
+import { useAuthStore } from '@/stores/auth'
+import type { ErrorResponse, EventCreateResponse } from '@/types'
+import axios, { AxiosError } from 'axios'
 import { ref } from 'vue'
-import {DEFAULT_COORDINATES, DEFAULT_IMAGE} from '@/defaultValues'
-
 
 const imgSrc = ref(DEFAULT_IMAGE)
 
@@ -132,19 +143,75 @@ const newEventForm = ref<HTMLFormElement | null>(null)
 
 const mapCoordinates = ref<number[]>(DEFAULT_COORDINATES)
 
-const handleAddEventFormSubmit = () => {
-  // code here...
+const isFormSubmitting = ref(false)
+
+const errorSubmitting = ref('')
+
+const eventStore = useEventsStore()
+const authStore = useAuthStore()
+
+const handleAddEventFormSubmit = (event: Event) => {
+  event.preventDefault()
+  const target = event.target as typeof event.target & {
+    title: { value: string }
+    description: { value: string }
+    location: { value: string }
+    date: { value: string }
+    file: {
+      value?: string
+    }
+  }
+  isFormSubmitting.value = true
+  errorSubmitting.value = ''
+  const addedEventData = {
+    title: target.title.value,
+    description: target.description.value,
+    plannedDate: target.date.value,
+    location: {
+      lat: mapCoordinates.value[0],
+      lon: mapCoordinates.value[1],
+      title: target.location.value
+    }
+  }
+
+  const formData = new FormData()
+  formData.append('data', JSON.stringify(addedEventData))
+  if (fileInput.value?.files) {
+    formData.append('files.image', fileInput.value?.files[0])
+  }
+
+  const token = authStore.user?.jwt
+
+  if (!token) return
+
+  axios
+    .post<EventCreateResponse>('http://localhost:1337/api/events', formData, {
+      headers: {
+        Authorization: 'Bearer ' + token
+      }
+    })
+    .then(() => {
+      eventStore.fetchEvents()
+      handleClearForm()
+      router.push('/')
+    })
+    .catch((errResp: AxiosError<ErrorResponse>) => {
+      errorSubmitting.value = errResp.response?.data?.error?.message ?? 'Error submitting data'
+      console.log(errResp)
+    })
+    .finally(() => {
+      isFormSubmitting.value = false
+    })
 }
 
 const handleClearForm = () => {
-  newEventForm.value?.reset();
-	mapCoordinates.value = DEFAULT_COORDINATES
-	imgSrc.value = DEFAULT_IMAGE;
-
+  newEventForm.value?.reset()
+  mapCoordinates.value = DEFAULT_COORDINATES
+  imgSrc.value = DEFAULT_IMAGE
 }
 
 const handleUpdateCoordinates = (coordinates: number[]) => {
-  mapCoordinates.value = coordinates;
+  mapCoordinates.value = coordinates
 }
 
 const onFileInputChange = () => {
