@@ -4,6 +4,8 @@ import EventView from '../views/EventView.vue'
 import SelectedView from '@/views/SelectedView.vue'
 import LoginView from '@/views/LoginView.vue'
 import AddEventView from '@/views/AddEventView.vue'
+import { useAuthStore } from '@/stores/auth'
+
 
 
 const router = createRouter({
@@ -17,23 +19,29 @@ const router = createRouter({
     {
       path: '/event/:eventId',
       name: 'event',
-			component: EventView
+      component: EventView
     },
     {
       path: '/selected',
       name: 'selected',
-			component: SelectedView
+      component: SelectedView
     },
-		{
+    {
       path: '/login',
       name: 'login',
-			component: LoginView
+      component: LoginView
     },
-		{
+    {
       path: '/add',
       name: 'add',
-			component: AddEventView
-    },
+      component: AddEventView,
+      beforeEnter: () => {
+				const authStore = useAuthStore()
+        if (!authStore.user) {
+          return { name: 'login' }
+        }
+      }
+    }
   ]
 })
 

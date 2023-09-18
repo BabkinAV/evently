@@ -38,6 +38,7 @@ export const useAuthStore = defineStore('auth', () => {
   const logoutUser = () => {
     localStorage.removeItem('user')
     user.value = null
+		router.push('/')
   }
 
 	const clearAuthenticationError = () => {
