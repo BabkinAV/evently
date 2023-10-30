@@ -13,15 +13,15 @@ export const useEventsStore = defineStore('events', () => {
 
 	const fetchEvents = () => {
 		axios
-    .get<{data: EventResponse[]}>('http://localhost:1337/api/events?populate=image')
+    .get<EventResponse[]>('http://localhost:8000/api/events')
     .then((resp) => {
-			eventArr.value = resp.data.data.map((el) => {
+			eventArr.value = resp.data.map((el) => {
         return {
           id: el.id,
-          img: el.attributes.image.data.attributes.url,
-          title: el.attributes.title,
-          description: el.attributes.description,
-          plannedDate: el.attributes.plannedDate
+          img: el.image,
+          title: el.name,
+          description: el.description,
+          plannedDate: el.plannedDate
         }
       })
     })

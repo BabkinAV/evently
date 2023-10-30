@@ -19,7 +19,8 @@
             <span>Logout</span>
           </span>
         </button>
-      </div>
+      </div>	
+			
       <RouterLink to="/login" v-else>
         <span class="flex items-center gap-1 text-white text-md">
           <UserIcon class="w-7 h-7" />

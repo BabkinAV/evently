@@ -4,7 +4,7 @@
       <RouterLink :to="'event/' + eventData.id">
         <img
           class="rounded-t-lg"
-          :src="'http://localhost:1337' + eventData.img"
+          :src="'http://localhost:8000/storage/' + eventData.img"
           alt="office space"
         />
       </RouterLink>

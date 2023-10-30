@@ -11,25 +11,18 @@ interface User {
   jwt: string
 }
 
+
 interface EventResponse {
   id: string
-  attributes: {
+  name: string
+  plannedDate: string
+  description: string
+  image: string
+  location: {
+    id: 1
     title: string
-    description: string
-    plannedDate: string
-    image: {
-      data: {
-        attributes: {
-          url: string
-        }
-      }
-    }
-    location: {
-      id: number
-      lon: number
-      lat: number
-      title: string
-    }
+    lat: number
+    long: number
   }
 }
 
@@ -146,6 +139,5 @@ export type {
   User,
   tokenPayload,
   reverseGeocodingResponse,
-	EventCreateResponse
-
+  EventCreateResponse
 }
