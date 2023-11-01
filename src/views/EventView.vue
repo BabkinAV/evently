@@ -1,9 +1,10 @@
 <template>
   <div>
+		<!-- TODO: introduce 'isLoading' ref and modify v-if directive -->
     <div v-if="event !== undefined" class="max-w-7xl mx-auto flex justify-center">
       <div class="max-w-xl">
         <img
-          :src="'http://localhost:1337' + event.img"
+          :src="'http://localhost:8000/storage/' + event.img"
           :alt="event.title + ' image'"
           class="mx-auto"
         />
@@ -61,6 +62,8 @@ const { addToSelectedEvents } = eventsStore
 
 const event = ref<Event>()
 
+const notFound = ref<Boolean>(false)
+
 const eventLocation = ref<{
   title: string
   lat: number
@@ -80,27 +83,30 @@ const handleReturnClick = () => {
 
 const fetchEvent = () => {
   axios
-    .get<{ data: EventResponse }>(
-      `http://localhost:1337/api/events/${route.params.eventId}?populate[0]=image&populate[1]=location`
-    )
+    .get<EventResponse | undefined>(`http://localhost:8000/api/events/${route.params.eventId}`)
     .then((resp) => {
-      const respObj = resp.data.data
+			notFound.value = false;
+      if (resp.data) {
+        const respObj = resp.data
 
-      // console.log(respObj);
-      const foundEvent = {
-        id: respObj.id,
-        img: respObj.attributes.image.data.attributes.url,
-        title: respObj.attributes.title,
-        description: respObj.attributes.description,
-        plannedDate: respObj.attributes.plannedDate
-      }
-      event.value = foundEvent
-      eventLocation.value = {
-        title: respObj.attributes.location.title,
-        lat: respObj.attributes.location.lat,
-        long: respObj.attributes.location.lon
-      }
-			console.log(eventLocation.value);
+        // console.log(respObj);
+        const foundEvent = {
+          id: respObj.id,
+          img: respObj.image,
+          title: respObj.name,
+          description: respObj.description,
+          plannedDate: respObj.plannedDate
+        }
+        event.value = foundEvent
+        eventLocation.value = {
+          title: respObj.location.title,
+          lat: respObj.location.lat,
+          long: respObj.location.long
+        }
+        console.log(eventLocation.value)
+      } else {
+				notFound.value = true;
+			}
     })
     .catch((err) => {
       console.log(err)

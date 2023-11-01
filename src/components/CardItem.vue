@@ -35,8 +35,7 @@
 import ArrowRight from './icons/ArrowRight.vue'
 import { CalendarDaysIcon } from '@heroicons/vue/20/solid'
 import { type Event } from '@/types'
-import {formattedDate} from '@/helpers/formattedDate'
+import { formattedDate } from '@/helpers/formattedDate'
 
 const { eventData } = defineProps<{ eventData: Event }>()
-
 </script>
