@@ -8,27 +8,30 @@ import router from '@/router'
 export const useAuthStore = defineStore('auth', () => {
   const user = ref<User | null>(null)
   const isAuthenticating = ref<Boolean>(false)
-	const authenticationError = ref<string>('');
+  const authenticationError = ref<string>('')
 
-  const authenticateUser = (identifier: string, password: string) => {
-    isAuthenticating.value = true;
-		authenticationError.value = '';
+  const authenticateUser = (email: string, password: string) => {
+    isAuthenticating.value = true
+    authenticationError.value = ''
     axios
-      .post<LoginResponse>('http://localhost:1337/api/auth/local', { identifier, password })
-      .then((resp) => {
-        const userName = resp.data.user.username
-        const jwt = resp.data.jwt
+      .get('http://localhost:8000/sanctum/csrf-cookie')
+      .then(() =>
+        axios
+          .post<LoginResponse>('http://localhost:8000/api/login', { email, password })
+          .then((resp) => {
+            const userName = resp.data.user.name
+            const jwt = resp.data.token
+            user.value = { userName, jwt }
 
-        user.value = { userName, jwt }
+            localStorage.setItem('user', JSON.stringify({ userName, jwt: resp.data.token }))
 
-        localStorage.setItem('user', JSON.stringify({ userName, jwt: resp.data.jwt }))
-
-        router.push('/')
-        console.log(resp.data)
-      })
+            router.push('/')
+            console.log(resp.data)
+          })
+      )
       .catch((errResp: AxiosError<ErrorResponse>) => {
-				authenticationError.value = errResp.response?.data.error.message ?? errResp.message;
-				console.log(errResp);
+        authenticationError.value = errResp.response?.data.message ?? errResp.message
+        console.log(errResp)
       })
       .finally(() => {
         isAuthenticating.value = false
@@ -38,12 +41,19 @@ export const useAuthStore = defineStore('auth', () => {
   const logoutUser = () => {
     localStorage.removeItem('user')
     user.value = null
-		router.push('/')
+    router.push('/')
   }
 
-	const clearAuthenticationError = () => {
-		authenticationError.value = '';
-	}
+  const clearAuthenticationError = () => {
+    authenticationError.value = ''
+  }
 
-  return { authenticateUser, user, logoutUser, isAuthenticating, authenticationError,  clearAuthenticationError}
+  return {
+    authenticateUser,
+    user,
+    logoutUser,
+    isAuthenticating,
+    authenticationError,
+    clearAuthenticationError
+  }
 })

@@ -11,7 +11,6 @@ interface User {
   jwt: string
 }
 
-
 interface EventResponse {
   id: string
   name: string
@@ -27,27 +26,19 @@ interface EventResponse {
 }
 
 interface LoginResponse {
-  jwt: string
+  token: string
   user: {
     id: number
-    username: string
+    name: string
     email: string
-    provider: string
-    confirmed: boolean
-    blocked: boolean
-    createdAt: string
-    updatedAt: string
   }
 }
 
 interface ErrorResponse {
-  data: null
-  error: {
-    status: string // HTTP status
-    name: string // Strapi error name ('ApplicationError' or 'ValidationError')
-    message: string // A human readable error message
-    details: {}
-  }
+  message: string
+	line: number
+	file: string
+	exception: string
 }
 
 interface EventCreateResponse {
