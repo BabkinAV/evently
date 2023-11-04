@@ -17,20 +17,24 @@ import { useAuthStore } from './stores/auth'
 import type { User } from './types'
 import jwt_decode from 'jwt-decode'
 import { type tokenPayload } from '@/types'
-const authStore = useAuthStore()
 
-const user = localStorage.getItem('user')
 
-if (user) {
-  const parsedUser = JSON.parse(user) as User
+// TODO: make post request with current token if found in localStorage
 
-  const decodedToken = jwt_decode<tokenPayload>(parsedUser.jwt)
-  const timestamp = Date.now()
+// const authStore = useAuthStore()
 
-  if (decodedToken.exp * 1000 > timestamp) {
-    authStore.user = parsedUser
-  } else {
-    authStore.logoutUser()
-  }
-}
+// const user = localStorage.getItem('user')
+
+// if (user) {
+//   const parsedUser = JSON.parse(user) as User
+
+//   const decodedToken = jwt_decode<tokenPayload>(parsedUser.jwt)
+//   const timestamp = Date.now()
+
+//   if (decodedToken.exp * 1000 > timestamp || !decodedToken) {
+//     authStore.user = parsedUser
+//   } else {
+//     authStore.logoutUser()
+//   }
+// }
 </script>

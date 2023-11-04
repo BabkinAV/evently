@@ -163,21 +163,17 @@ const handleAddEventFormSubmit = (event: Event) => {
   }
   isFormSubmitting.value = true
   errorSubmitting.value = ''
-  const addedEventData = {
-    title: target.title.value,
-    description: target.description.value,
-    plannedDate: target.date.value,
-    location: {
-      lat: mapCoordinates.value[0],
-      lon: mapCoordinates.value[1],
-      title: target.location.value
-    }
-  }
+
 
   const formData = new FormData()
-  formData.append('data', JSON.stringify(addedEventData))
+	formData.append('name', target.title.value);
+	formData.append('description', target.description.value);
+	formData.append('plannedDate', target.date.value);
+	formData.append('title', target.title.value);
+	formData.append('lat', mapCoordinates.value[0].toString());
+	formData.append('long', mapCoordinates.value[1].toString());
   if (fileInput.value?.files) {
-    formData.append('files.image', fileInput.value?.files[0])
+    formData.append('image', fileInput.value?.files[0])
   }
 
   const token = authStore.user?.jwt
@@ -185,7 +181,7 @@ const handleAddEventFormSubmit = (event: Event) => {
   if (!token) return
 
   axios
-    .post<EventCreateResponse>('http://localhost:1337/api/events', formData, {
+    .post<EventCreateResponse>('http://localhost:8000/api/events/', formData, {
       headers: {
         Authorization: 'Bearer ' + token
       }
@@ -196,7 +192,7 @@ const handleAddEventFormSubmit = (event: Event) => {
       router.push('/')
     })
     .catch((errResp: AxiosError<ErrorResponse>) => {
-      errorSubmitting.value = errResp.response?.data?.error?.message ?? 'Error submitting data'
+      errorSubmitting.value = errResp.response?.data?.message ?? 'Error submitting data'
       console.log(errResp)
     })
     .finally(() => {
