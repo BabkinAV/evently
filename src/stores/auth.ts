@@ -2,7 +2,7 @@ import axios, { AxiosError } from 'axios'
 import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
-import { type ErrorResponse, type LoginResponse, type User } from '../types'
+import { type ErrorResponse, type LoginResponse, type User, type UserResponse } from '../types'
 import router from '@/router'
 
 export const useAuthStore = defineStore('auth', () => {
@@ -38,6 +38,28 @@ export const useAuthStore = defineStore('auth', () => {
       })
   }
 
+  const validateToken = (token: string) => {
+    axios
+      .get('http://localhost:8000/sanctum/csrf-cookie')
+      .then(() =>
+        axios
+          .get<UserResponse>('http://localhost:8000/api/user', {
+            headers: {
+              Authorization: 'Bearer ' + token
+            }
+          })
+          .then((resp) => {
+            const userName = resp.data.name
+
+            user.value = { userName, jwt: token }
+          })
+      )
+      .catch((errResp: AxiosError<ErrorResponse>) => {
+        localStorage.removeItem('user')
+        console.log(errResp)
+      })
+  }
+
   const logoutUser = () => {
     localStorage.removeItem('user')
     user.value = null
@@ -50,6 +72,7 @@ export const useAuthStore = defineStore('auth', () => {
 
   return {
     authenticateUser,
+    validateToken,
     user,
     logoutUser,
     isAuthenticating,

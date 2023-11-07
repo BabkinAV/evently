@@ -25,20 +25,22 @@ interface EventResponse {
   }
 }
 
+interface UserResponse {
+  id: number
+  name: string
+  email: string
+}
+
 interface LoginResponse {
   token: string
-  user: {
-    id: number
-    name: string
-    email: string
-  }
+  user: UserResponse
 }
 
 interface ErrorResponse {
   message: string
-	line: number
-	file: string
-	exception: string
+  line: number
+  file: string
+  exception: string
 }
 
 interface EventCreateResponse {
@@ -125,6 +127,7 @@ interface reverseGeocodingResponse {
 export type {
   Event,
   EventResponse,
+	UserResponse,
   LoginResponse,
   ErrorResponse,
   User,

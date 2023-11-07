@@ -15,26 +15,18 @@
 import TheHeader from './components/layout/TheHeader.vue'
 import { useAuthStore } from './stores/auth'
 import type { User } from './types'
-import jwt_decode from 'jwt-decode'
-import { type tokenPayload } from '@/types'
 
 
-// TODO: make post request with current token if found in localStorage
+const authStore = useAuthStore()
 
-// const authStore = useAuthStore()
+const user = localStorage.getItem('user')
 
-// const user = localStorage.getItem('user')
-
-// if (user) {
-//   const parsedUser = JSON.parse(user) as User
-
-//   const decodedToken = jwt_decode<tokenPayload>(parsedUser.jwt)
-//   const timestamp = Date.now()
-
-//   if (decodedToken.exp * 1000 > timestamp || !decodedToken) {
-//     authStore.user = parsedUser
-//   } else {
-//     authStore.logoutUser()
-//   }
-// }
+if (user) {
+	const parsedUser = JSON.parse(user) as User
+	if (parsedUser.jwt) {
+		authStore.validateToken(parsedUser.jwt)
+	} else {
+		localStorage.removeItem('user')
+	}
+}
 </script>

@@ -1,6 +1,5 @@
 <template>
   <div>
-		<!-- TODO: introduce 'isLoading' ref and modify v-if directive -->
     <div v-if="event !== undefined" class="max-w-7xl mx-auto flex justify-center">
       <div class="max-w-xl">
         <img
