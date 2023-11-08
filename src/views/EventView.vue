@@ -30,6 +30,9 @@
         />
         <div class="flex justify-center pt-3">
           <ButtonCustom @click="handleAddToSelected"> Add to selected </ButtonCustom>
+          <ButtonCustom v-if="user" class="ml-5" @click="handleDeleteClick" variant="danger">
+            Delete event
+          </ButtonCustom>
           <ButtonCustom class="ml-5" @click="handleReturnClick" variant="outlined">
             Return to main
           </ButtonCustom>
@@ -53,11 +56,17 @@ import { useRoute } from 'vue-router'
 
 import type { Event, EventResponse } from '@/types'
 import { ref } from 'vue'
+import { useAuthStore } from '@/stores/auth'
 
 const route = useRoute()
 const eventsStore = useEventsStore()
+const auth = useAuthStore();
 
-const { addToSelectedEvents } = eventsStore
+const {user} = auth;
+
+
+
+const { addToSelectedEvents, deleteEvent } = eventsStore
 
 const event = ref<Event>()
 
@@ -78,6 +87,10 @@ const handleAddToSelected = () => {
 
 const handleReturnClick = () => {
   router.push('/')
+}
+
+const handleDeleteClick = () => {
+	deleteEvent(route.params.eventId as string, user!.jwt)
 }
 
 const fetchEvent = () => {
