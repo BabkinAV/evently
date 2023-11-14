@@ -29,7 +29,15 @@
           v-if="eventLocation !== undefined"
         />
         <div class="flex justify-center pt-3">
-          <ButtonCustom @click="handleAddToSelected"> Add to selected </ButtonCustom>
+          <ButtonCustom
+            v-if="
+              selectedEvents.findIndex((selectedEvent) => selectedEvent.id === event?.id) !== -1
+            "
+            @click="handleRemoveFromSelected"
+          >
+            Remove from selected
+          </ButtonCustom>
+          <ButtonCustom @click="handleAddToSelected" v-else> Add to selected </ButtonCustom>
           <ButtonCustom v-if="user" class="ml-5" @click="handleDeleteClick" variant="danger">
             Delete event
           </ButtonCustom>
@@ -60,13 +68,11 @@ import { useAuthStore } from '@/stores/auth'
 
 const route = useRoute()
 const eventsStore = useEventsStore()
-const auth = useAuthStore();
+const auth = useAuthStore()
 
-const {user} = auth;
+const { user } = auth
 
-
-
-const { addToSelectedEvents, deleteEvent } = eventsStore
+const { addToSelectedEvents, deleteEvent, selectedEvents, removeFromSelectedEvents } = eventsStore
 
 const event = ref<Event>()
 
@@ -85,19 +91,26 @@ const handleAddToSelected = () => {
   router.push('/')
 }
 
+const handleRemoveFromSelected = () => {
+  if (event.value) {
+    removeFromSelectedEvents(event.value.id)
+  }
+  router.push('/')
+}
+
 const handleReturnClick = () => {
   router.push('/')
 }
 
 const handleDeleteClick = () => {
-	deleteEvent(route.params.eventId as string, user!.jwt)
+  deleteEvent(route.params.eventId as string, user!.jwt)
 }
 
 const fetchEvent = () => {
   axios
     .get<EventResponse | undefined>(`http://localhost:8000/api/events/${route.params.eventId}`)
     .then((resp) => {
-			notFound.value = false;
+      notFound.value = false
       if (resp.data) {
         const respObj = resp.data
 
@@ -117,8 +130,8 @@ const fetchEvent = () => {
         }
         console.log(eventLocation.value)
       } else {
-				notFound.value = true;
-			}
+        notFound.value = true
+      }
     })
     .catch((err) => {
       console.log(err)

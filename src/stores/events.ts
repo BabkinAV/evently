@@ -5,7 +5,7 @@ import { defineStore } from 'pinia'
 import { ref } from 'vue'
 
 export const useEventsStore = defineStore('events', () => {
-	// TODO: introduce `loading` ref and modify conditional render in Home view, add Spinner component
+  const loadingEvent = ref<Boolean>(false)
   const selectedEvents = ref<Event[]>([])
   const eventArr = ref<Event[]>([])
   // const doubleCount = computed(() => count.value * 2)
@@ -13,7 +13,17 @@ export const useEventsStore = defineStore('events', () => {
     selectedEvents.value.push(addedEvent)
   }
 
+  const removeFromSelectedEvents = (eventId: string) => {
+    console.log(eventId)
+    console.log('selectedEvents before:', selectedEvents.value)
+    selectedEvents.value = selectedEvents.value.filter(
+      (selectedEvent) => selectedEvent.id !== eventId
+    )
+    console.log('selectedEvents before:', selectedEvents.value)
+  }
+
   const fetchEvents = () => {
+    loadingEvent.value = true
     axios
       .get<EventResponse[]>('http://localhost:8000/api/events')
       .then((resp) => {
@@ -30,6 +40,9 @@ export const useEventsStore = defineStore('events', () => {
       .catch((err) => {
         console.log(err)
       })
+      .finally(() => {
+        loadingEvent.value = false
+      })
   }
 
   const deleteEvent = (EventId: string, token: string) => {
@@ -40,8 +53,8 @@ export const useEventsStore = defineStore('events', () => {
         }
       })
       .then(() => {
-        router.push('/');
-				fetchEvents();
+        router.push('/')
+        fetchEvents()
       })
       .catch((err: ErrorResponse) => {
         console.log(err.message)
@@ -50,5 +63,13 @@ export const useEventsStore = defineStore('events', () => {
 
   fetchEvents()
 
-  return { eventArr, fetchEvents, selectedEvents, addToSelectedEvents, deleteEvent }
+  return {
+    eventArr,
+    fetchEvents,
+    selectedEvents,
+    addToSelectedEvents,
+    deleteEvent,
+    loadingEvent,
+    removeFromSelectedEvents
+  }
 })

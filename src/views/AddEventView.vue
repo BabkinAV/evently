@@ -161,15 +161,15 @@ const handleAddEventFormSubmit = (event: Event) => {
       value?: string
     }
   }
-  isFormSubmitting.value = true
-  errorSubmitting.value = ''
+  isFormSubmitting.value = true;
+  errorSubmitting.value = '';
 
 
   const formData = new FormData()
 	formData.append('name', target.title.value);
 	formData.append('description', target.description.value);
 	formData.append('plannedDate', target.date.value);
-	formData.append('title', target.title.value);
+	formData.append('title', target.location.value);
 	formData.append('lat', mapCoordinates.value[0].toString());
 	formData.append('long', mapCoordinates.value[1].toString());
   if (fileInput.value?.files) {
@@ -187,9 +187,9 @@ const handleAddEventFormSubmit = (event: Event) => {
       }
     })
     .then(() => {
+      router.push('/')
       eventStore.fetchEvents()
       handleClearForm()
-      router.push('/')
     })
     .catch((errResp: AxiosError<ErrorResponse>) => {
       errorSubmitting.value = errResp.response?.data?.message ?? 'Error submitting data'
