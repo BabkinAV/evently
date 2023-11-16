@@ -139,6 +139,7 @@ const fetchEvent = () => {
 }
 
 fetchEvent()
+
 // fetchLocation(55.784819222274876, 37.62603869054313)
 // Radisson Blu Olimpiyskiy
 </script>

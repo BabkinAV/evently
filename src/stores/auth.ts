@@ -37,6 +37,33 @@ export const useAuthStore = defineStore('auth', () => {
         isAuthenticating.value = false
       })
   }
+  const registerUser = (name: string, email: string, password: string) => {
+    isAuthenticating.value = true
+    authenticationError.value = ''
+    axios
+      .get('http://localhost:8000/sanctum/csrf-cookie')
+      .then(() =>
+        axios
+          .post<LoginResponse>('http://localhost:8000/api/register', { name, email, password })
+          .then((resp) => {
+            const userName = resp.data.user.name
+            const jwt = resp.data.token
+            user.value = { userName, jwt }
+
+            localStorage.setItem('user', JSON.stringify({ userName, jwt: resp.data.token }))
+
+            router.push('/')
+            console.log(resp.data)
+          })
+      )
+      .catch((errResp: AxiosError<ErrorResponse>) => {
+        authenticationError.value = errResp.response?.data.message ?? errResp.message
+        console.log(errResp)
+      })
+      .finally(() => {
+        isAuthenticating.value = false
+      })
+  }
 
   const validateToken = (token: string) => {
     axios
@@ -77,6 +104,7 @@ export const useAuthStore = defineStore('auth', () => {
     logoutUser,
     isAuthenticating,
     authenticationError,
-    clearAuthenticationError
+    clearAuthenticationError,
+    registerUser
   }
 })

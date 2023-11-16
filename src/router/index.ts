@@ -3,6 +3,7 @@ import HomeView from '../views/HomeView.vue'
 import EventView from '../views/EventView.vue'
 import SelectedView from '@/views/SelectedView.vue'
 import LoginView from '@/views/LoginView.vue'
+import RegisterView from '@/views/RegisterView.vue'
 import AddEventView from '@/views/AddEventView.vue'
 import { useAuthStore } from '@/stores/auth'
 
@@ -29,7 +30,18 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: LoginView
+      component: LoginView,
+			beforeEnter: () => {
+				const authStore = useAuthStore()
+        if (authStore.user) {
+          return { name: 'home' }
+        }
+      }
+    },
+    {
+      path: '/register',
+      name: 'register',
+      component: RegisterView
     },
     {
       path: '/add',

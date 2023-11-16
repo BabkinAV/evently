@@ -19,7 +19,6 @@ export const useEventsStore = defineStore('events', () => {
     selectedEvents.value = selectedEvents.value.filter(
       (selectedEvent) => selectedEvent.id !== eventId
     )
-    console.log('selectedEvents before:', selectedEvents.value)
   }
 
   const fetchEvents = () => {
